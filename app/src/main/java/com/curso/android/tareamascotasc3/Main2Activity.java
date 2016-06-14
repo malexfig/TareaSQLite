@@ -10,12 +10,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.curso.android.tareamascotasc3.adapters.MascotaAdaptador;
+import com.curso.android.tareamascotasc3.db.ConstructorMascotas;
+import com.curso.android.tareamascotasc3.pojos.Mascota;
+
 import java.util.ArrayList;
 
 public class Main2Activity extends AppCompatActivity {
 
     Button btnFavorito;
-    private RecyclerView listaMascotasFavorias;
+    private RecyclerView rvMascotasFavorias;
     private ArrayList<Mascota> mascotas;
     private ArrayList<Mascota> mascotasFavoritas;
 
@@ -25,7 +29,6 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-
         Toolbar actionBar = (Toolbar) findViewById(R.id.miActionBar);
         setSupportActionBar(actionBar);
         getSupportActionBar().setTitle("");
@@ -34,16 +37,20 @@ public class Main2Activity extends AppCompatActivity {
         btnFavorito = (Button) actionBar.findViewById(R.id.btnFavorito);
         btnFavorito.setVisibility(View.INVISIBLE);
 
-        listaMascotasFavorias = (RecyclerView) findViewById(R.id.rvMascotas2);
+        rvMascotasFavorias = (RecyclerView) findViewById(R.id.rvMascotas2);
         LinearLayoutManager llm = new LinearLayoutManager(this);
         llm.setOrientation(LinearLayoutManager.VERTICAL);
         llm.setReverseLayout(true);
         llm.setStackFromEnd(true);
 
-        listaMascotasFavorias.setLayoutManager(llm);
+        rvMascotasFavorias.setLayoutManager(llm);
+
+        ConstructorMascotas constructorMascotas = new ConstructorMascotas(this);
+        mascotasFavoritas = constructorMascotas.obtenerFavoritas();
+        System.out.println("TAMAÑO FAVORITAS " +mascotasFavoritas.size());
 
         mascotas = getIntent().getParcelableArrayListExtra("mascotas");
-        mascotasFavoritas = getIntent().getParcelableArrayListExtra("mascotasFavoritas");
+        //mascotasFavoritas = getIntent().getParcelableArrayListExtra("mascotasFavoritas");
 
         if (mascotasFavoritas != null)
             inicializarAdaptador();
@@ -64,8 +71,8 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void inicializarAdaptador() {
-        MascotaAdaptador mascotaAdaptador = new MascotaAdaptador(mascotasFavoritas, mascotasFavoritas);
-        listaMascotasFavorias.setAdapter(mascotaAdaptador);
+        MascotaAdaptador mascotaAdaptador = new MascotaAdaptador(mascotasFavoritas, mascotasFavoritas, this);
+        rvMascotasFavorias.setAdapter(mascotaAdaptador);
     }
 
 }

@@ -1,74 +1,90 @@
 package com.curso.android.tareamascotasc3;
 
 import android.content.Intent;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
+
+import com.curso.android.tareamascotasc3.adapters.PageAdapter;
+import com.curso.android.tareamascotasc3.vista.fragments.RVFotosMascotaFragment;
+import com.curso.android.tareamascotasc3.vista.fragments.RecyclerViewFragment;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Mascota> mascotas;
-    private ArrayList<Mascota> mascotasFavoritas;
-    private RecyclerView listaMascotas;
 
-    Button botonFavorito;
+    //para viewPager y fragment
+    private Toolbar toolbar;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar actionBar = (Toolbar) findViewById(R.id.miActionBar);
-        setSupportActionBar(actionBar);
+        toolbar = (Toolbar) findViewById(R.id.miActionBar);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        setUpViewPager();
 
-        listaMascotas = (RecyclerView) findViewById(R.id.rvMascotas);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-
-        listaMascotas.setLayoutManager(llm);
-
-        if(getIntent().getParcelableArrayListExtra("mascotas") != null)
-            mascotas = getIntent().getParcelableArrayListExtra("mascotas");
-        else
-            cargarMascotas();
-
-        if(getIntent().getParcelableArrayListExtra("mascotasFavoritas") != null)
-            mascotasFavoritas = getIntent().getParcelableArrayListExtra("mascotasFavoritas");
-        else
-            mascotasFavoritas = new ArrayList<>();
-
-        inicializarAdaptador();
-
-        botonFavorito = (Button)findViewById(R.id.btnFavorito);
-        botonFavorito.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                Intent actividadFavoritas = new Intent(MainActivity.this, Main2Activity.class);
-                actividadFavoritas.putExtra("mascotas", mascotas);
-                actividadFavoritas.putExtra("mascotasFavoritas", mascotasFavoritas);
-                startActivity(actividadFavoritas);
-            }
-        });
+        if(toolbar != null){
+            setSupportActionBar(toolbar);
+        }
 
     }
 
-    private void inicializarAdaptador() {
-        MascotaAdaptador adaptador = new MascotaAdaptador(mascotas, mascotasFavoritas);
-        listaMascotas.setAdapter(adaptador);
+    /*********************************
+     * INICIO MENÚ OPCIONES
+     *****************************************/
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_opciones, menu);
+        return true;
     }
 
-    private void cargarMascotas() {
-        mascotas = new ArrayList<Mascota>();
-        mascotas.add(new Mascota(R.drawable.m1, "perrito", 0, R.drawable.hueso, R.drawable.huesoamarillo));
-        mascotas.add(new Mascota(R.drawable.m2, "cachorro", 0, R.drawable.hueso, R.drawable.huesoamarillo));
-        mascotas.add(new Mascota(R.drawable.m3, "doberman", 0, R.drawable.hueso, R.drawable.huesoamarillo));
-        mascotas.add(new Mascota(R.drawable.m4, "caballo", 0, R.drawable.hueso, R.drawable.huesoamarillo));
-        mascotas.add(new Mascota(R.drawable.m5, "gato", 0, R.drawable.hueso, R.drawable.huesoamarillo));
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.mContacto:
+                Intent email = new Intent(MainActivity.this, Contacto.class);
+                startActivity(email);
+                break;
+            case R.id.mAcercade:
+                Intent acercade = new Intent(MainActivity.this, AcercaDe.class);
+                startActivity(acercade);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /*******************************
+     * FIN MENÚ OPCIONES
+     **********************************************/
+
+    private ArrayList<Fragment> agregarFragment(){
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(new RecyclerViewFragment());
+        fragments.add(new RVFotosMascotaFragment());
+
+        return fragments;
+    }
+
+    private void setUpViewPager(){
+        viewPager.setAdapter(new PageAdapter(getSupportFragmentManager(), agregarFragment()));
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_home);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_dog);
     }
 }

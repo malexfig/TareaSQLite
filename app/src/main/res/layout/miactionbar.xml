@@ -7,6 +7,7 @@
     android:background="@color/colorPrimary"
     android:elevation="4dp"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:layout_scrollFlags="scroll|enterAlways"
     android:title="Petagram"
     >
 

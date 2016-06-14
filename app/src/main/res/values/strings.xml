@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">TareaMascotasC3</string>
+    <string name="contacto">Contacto</string>
+    <string name="acercade">Acerca De</string>
+    <string name="nombre">Nombre</string>
+    <string name="correo">Correo</string>
+    <string name="mensaje">Mensaje</string>
+    <string name="enviarMail">Enviar Correo</string>
+    <string name="server_client_id">11895629271-3ks068nrg3rc7b2frnjahcmeluj7tfjn.apps.googleusercontent.com</string>
+    <string name="acercademi">Programado Por: Marlon Alexander Figueroa</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
